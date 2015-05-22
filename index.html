@@ -1,92 +1,116 @@
+<!DOCTYPE html>
 <html>
-<head>
-	<title></title>
-	<style type="text/css">
+  <head>
+    <title>Capture Photo</title>
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1"/>
+    <script type="text/javascript" charset="utf-8" src="js/phonegap.js"></script>
+    <script type="text/javascript" charset="utf-8">
 
-	button.camera-control {
-	  background-color: #f3f3f3;
-	  background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f3f3f3), color-stop(50%, #dddddd), color-stop(50%, #d2d2d2), color-stop(100%, #dfdfdf));
-	  background-image: -webkit-linear-gradient(top, #f3f3f3 0%, #dddddd 50%, #d2d2d2 50%, #dfdfdf 100%);
-	  background-image: linear-gradient(top, #f3f3f3 0%, #dddddd 50%, #d2d2d2 50%, #dfdfdf 100%);
-	  border-right: 1px solid #dfdfdf;
-	  border-bottom: 1px solid #b4b4b4;
-	  border-right: 1px solid #dfdfdf;
-	  -webkit-border-radius: 5px;
-	  border-radius: 5px;
-	  -webkit-box-shadow: inset 0 1px 0 0 white, 0 1px 0 0 #d5d5d5, 0 -1px 2px 1px #efefef;
-	  box-shadow: inset 0 1px 0 0 white, 0 1px 0 0 #d5d5d5, 0 -1px 2px 1px #efefef;
-	  color: #666;
-	  display: block;
-	  font: bold 16px "helvetica neue", helvetica, arial, sans-serif;
-	  margin: 10px auto;
-	  padding: 7px 0;
-	  text-shadow: 0 1px 1px #fff;
-	  width: 150px; 
-	}
+    var pictureSource;   // picture source
+    var destinationType; // sets the format of returned value 
 
-	button.camera-control:hover {
-	    background-color: #e5e5e5;
-	    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #e5e5e5), color-stop(50%, #d1d1d1), color-stop(50%, #c4c4c4), color-stop(100%, #b8b8b8));
-	    background-image: -webkit-linear-gradient(top, #e5e5e5 0%, #d1d1d1 50%, #c4c4c4 50%, #b8b8b8 100%);
-	    background-image: linear-gradient(top, #e5e5e5 0%, #d1d1d1 50%, #c4c4c4 50%, #b8b8b8 100%);
-	    -webkit-box-shadow: inset 0 1px 0 0 #f2f2f2, 0 1px 0 0 #c9c9c9, 0 -1px 2px 1px #e3e3e3;
-	    box-shadow: inset 0 1px 0 0 #f2f2f2, 0 1px 0 0 #c9c9c9, 0 -1px 2px 1px #e3e3e3; }
-	  button.camera-control:active {
-	    -webkit-box-shadow: inset 0 0 30px 0 #999999, 0 1px 0 0 white;
-	    box-shadow: inset 0 0 30px 0 #999999, 0 1px 0 0 white; 
-	}
+    // Wait for PhoneGap to connect with the device
+    //
+    document.addEventListener("deviceready",onDeviceReady,false);
 
-	</style>
-</head>
-<body>
-	<div id="camera">
-    <button class="camera-control" onclick="capturePhoto();">Capture Photo</button>
- 
-    <div style="text-align:center;margin:20px;">
-        <img id="cameraPic" src="" style="width:auto;height:120px;"></img>
-    </div>
-	</div>
-	<script type="text/javascript">
+    // PhoneGap is ready to be used!
+    //
+    function onDeviceReady() {
+        pictureSource=navigator.camera.PictureSourceType;
+        destinationType=navigator.camera.DestinationType;
+    }
 
-	function capturePhoto(){
-	    navigator.camera.getPicture(uploadPhoto,null,{sourceType:1,quality:60});
-	}
+    // Called when a photo is successfully retrieved
+    //
+    function onPhotoDataSuccess(imageData) {
+      // Get image handle
+      //
+      var smallImage = document.getElementById('smallImage');
 
-	function uploadPhoto(data){
-	// this is where you would send the image file to server
+      // Unhide image elements
+      //
+      smallImage.style.display = 'block';
 
-		cameraPic.src = "data:image/jpeg;base64," + data;
-		// Successful upload to the server
-		navigator.notification.alert(
-			'Your Photo has been uploaded',  // message
-			okay,                           // callback
-		    'Photo Uploaded',              // title
-		    'OK'                          // buttonName
-		);
+      // Show the captured photo
+      // The inline CSS rules are used to resize the image
+      //
+      smallImage.src = "data:image/jpeg;base64," + imageData;
+    }
+    
+	// Called when a photo is successfully retrieved
+    //
+    function onPhotoFileSuccess(imageData) {
+      // Get image handle
+      console.log(JSON.stringify(imageData));
+      
+   	  // Get image handle
+      //
+      var smallImage = document.getElementById('smallImage');
 
-		// upload has failed Fail
+      // Unhide image elements
+      //
+      smallImage.style.display = 'block';
 
-		/* 
+      // Show the captured photo
+      // The inline CSS rules are used to resize the image
+      //
+      smallImage.src = imageData;
+    }
 
-		if (failedToUpload){
+    // Called when a photo is successfully retrieved
+    //
+    function onPhotoURISuccess(imageURI) {
+      // Uncomment to view the image file URI 
+      // console.log(imageURI);
 
-		navigator.notification.alert(
-			'Your Photo has failed to upload',
-			failedDismissed,
-		    'Photo Not Uploaded',
-		    'OK'
-			);
+      // Get image handle
+      //
+      var largeImage = document.getElementById('largeImage');
 
-		} 
-		*/
+      // Unhide image elements
+      //
+      largeImage.style.display = 'block';
 
+      // Show the captured photo
+      // The inline CSS rules are used to resize the image
+      //
+      largeImage.src = imageURI;
+    }
 
-	}
+    // A button will call this function
+    //
+    function capturePhotoWithData() {
+      // Take picture using device camera and retrieve image as base64-encoded string
+      navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50 });
+    }
 
-	function okay(){
-		// Do something
-	}
+    function capturePhotoWithFile() {
+        navigator.camera.getPicture(onPhotoFileSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI });
+    }
+    
+    // A button will call this function
+    //
+    function getPhoto(source) {
+      // Retrieve image file location from specified source
+      navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
+        destinationType: destinationType.FILE_URI,
+        sourceType: source });
+    }
 
-	</script>
-</body>
+    // Called if something bad happens.
+    // 
+    function onFail(message) {
+      alert('Failed because: ' + message);
+    }
+
+    </script>
+  </head>
+  <body>
+    <button onclick="capturePhotoWithData();">Capture Photo With Image Data</button> <br>
+    <button onclick="capturePhotoWithFile();">Capture Photo With Image File URI</button> <br>
+    <button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo Library</button><br>
+    <button onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">From Photo Album</button><br>
+    <img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
+    <img style="display:none;" id="largeImage" src="" />
+  </body>
 </html>
