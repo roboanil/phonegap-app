@@ -1,0 +1,65 @@
+#map {
+	
+}
+
+.clearall {
+	clear: both;
+}
+.gap {
+	padding: 15px 0;
+}
+
+.home-screen {
+	background: #01579b;
+	color: #FFF;
+}
+.home-screen h3 {
+	font-weight: 200;
+	text-transform: uppercase;
+	margin-top: 50px;
+}
+.home-screen p {
+	font-weight: 200;
+	margin-top: 10px;
+	text-transform: uppercase;
+
+}
+.home-screen .logo {
+	display: inline-block;
+	width: 60%;
+	margin-top: 20px;
+}
+.home-screen .divider {
+	margin: 40px 0;
+}
+
+.home-screen .btn {
+	color: #000;
+}
+
+.circle-text-white {
+	color: #FFF;
+	border: 1px #FFF solid;
+	height: 40px;
+	width: 40px;
+	border-radius: 40px;
+	line-height: 40px;
+	display: inline-block;
+	font-weight: 200;
+}
+
+.login-screen .logo {
+	display: inline-block;
+	width: 60%;
+	margin-top: 20px;
+}
+
+.login-screen h3 {
+	font-weight: 200;
+	text-transform: uppercase;
+}
+
+.login-screen h3 span {
+	font-size: 16px;
+	font-weight: 300;
+}
