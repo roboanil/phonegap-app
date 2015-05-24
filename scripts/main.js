@@ -203,7 +203,7 @@ function resOnError(error) {
 }
 */
 
-$(document)('click', '.change-pic-btn', changePicture);
+$(document)('click', '.getpic', changePicture);
 
 changePicture = function(event) {
     event.preventDefault();
