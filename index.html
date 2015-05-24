@@ -1,112 +1,116 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <!--Import materialize.css-->
-    <link type="text/css" rel="stylesheet" href="materialize/css/materialize.css"  media="screen,projection"/>
-    <link type="text/css" rel="stylesheet" href="style.css"  media="screen,projection"/>
-    <link rel="shortcut icon" type="image/x-icon" href="/images/ico.png"/> 
+  <head>
+    <title>Capture Photo</title>
+    <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1"/>
+    <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+    <script type="text/javascript" charset="utf-8">
 
+    var pictureSource;   // picture source
+    var destinationType; // sets the format of returned value 
 
-    <!--Let browser know website is optimized for mobile-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    // Wait for PhoneGap to connect with the device
+    //
+    document.addEventListener("deviceready",onDeviceReady,false);
 
+    // PhoneGap is ready to be used!
+    //
+    function onDeviceReady() {
+        pictureSource=navigator.camera.PictureSourceType;
+        destinationType=navigator.camera.DestinationType;
+    }
 
-</head>
+    // Called when a photo is successfully retrieved
+    //
+    function onPhotoDataSuccess(imageData) {
+      // Get image handle
+      //
+      var smallImage = document.getElementById('smallImage');
 
-<body>
+      // Unhide image elements
+      //
+      smallImage.style.display = 'block';
 
+      // Show the captured photo
+      // The inline CSS rules are used to resize the image
+      //
+      smallImage.src = "data:image/jpeg;base64," + imageData;
+    }
     
-<nav class="light-blue darken-4">
-       
-       
-            <img src="http://hoverxlabs.com/lands/collector/images/logo-white.png" width="140">
+  // Called when a photo is successfully retrieved
+    //
+    function onPhotoFileSuccess(imageData) {
+      // Get image handle
+      console.log(JSON.stringify(imageData));
+      
+      // Get image handle
+      //
+      var smallImage = document.getElementById('smallImage');
 
-</nav>
+      // Unhide image elements
+      //
+      smallImage.style.display = 'block';
 
-    <div class="container">
+      // Show the captured photo
+      // The inline CSS rules are used to resize the image
+      //
+      smallImage.src = imageData;
+    }
 
+    // Called when a photo is successfully retrieved
+    //
+    function onPhotoURISuccess(imageURI) {
+      // Uncomment to view the image file URI 
+      // console.log(imageURI);
 
-        <div class="section">
-           <h5>Current Location</h5>
-           <p><strong>Latitude</strong> <span id="lat"></span></p>
-           <p><strong>Longitude</strong> <span id="long"></span></p>
-           <p><strong>Accuracy</strong> <strong id="accuracy-m"></strong>m</p>
-           <blockquote id="warning"></blockquote>
-           <div class="clearAll"></div>
-        </div>
+      // Get image handle
+      //
+      var largeImage = document.getElementById('largeImage');
 
-        <div class="divider"></div> 
+      // Unhide image elements
+      //
+      largeImage.style.display = 'block';
 
-        <div class="row land-details">
-            
-            <h5>Land details</h5>
+      // Show the captured photo
+      // The inline CSS rules are used to resize the image
+      //
+      largeImage.src = imageURI;
+    }
 
-            <div class="preloader-wrapper big active" id="addnewloader" style="display:none;">
-                <div class="spinner-layer spinner-blue-only">
-                  <div class="circle-clipper left">
-                    <div class="circle"></div>
-                  </div><div class="gap-patch">
-                    <div class="circle"></div>
-                  </div><div class="circle-clipper right">
-                    <div class="circle"></div>
-                  </div>
-                </div>
-              </div>
-            
-            <form action="walk-boundaries.php" method="post" id="addnewform" enctype="multipart/form-data">
+    // A button will call this function
+    //
+    function capturePhotoWithData() {
+      // Take picture using device camera and retrieve image as base64-encoded string
+      navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50 });
+    }
 
-            
-              <div class="input-field">
-                  <input placeholder="Give this land a title" name="address" id="formatted_address" type="text" class="validate" required>
-              </div>
+    function capturePhotoWithFile() {
+        navigator.camera.getPicture(onPhotoFileSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI });
+    }
+    
+    // A button will call this function
+    //
+    function getPhoto(source) {
+      // Retrieve image file location from specified source
+      navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
+        destinationType: destinationType.FILE_URI,
+        sourceType: source });
+    }
 
-              <div class="input-field">
-                  <input placeholder="Land area in acres" id="area" name="area" type="number" class="validate" required>
-              </div>
+    // Called if something bad happens.
+    // 
+    function onFail(message) {
+      alert('Failed because: ' + message);
+    }
 
-              <div class="input-field">
-                  <input placeholder="Cost per acre in rupees" id="cost" name="cost" type="number" class="validate" required>
-              </div>
-
-              <div class="input-field">
-                  <input placeholder="Owner Name" id="ownername" name="ownername" type="text" class="validate">
-              </div>
-
-              <div class="input-field">
-                  <input placeholder="Owner Phone No." id="ownerphone" name="ownerphone" type="number" class="validate">
-              </div>
-
-              <h5>Upload photo</h5>
-
-              <div class="file-field input-field">
-                 <!--  <input class="file-path validate" type="text"/>
-                  <div class="btn light-blue darken-3">-->
-                      <span class="getpic">Photo</span>
-                      <!-- <input type="file" accept="image/*" name="imagecamera" /> -->
-                  <!-- </div> -->
-              </div>
-
-              <div class="clearfix"></div>
-
-              <p class="center-align">Make sure the details above are correct and press submit.</p>
-              <input type="submit" id="addnewsubmit" name="submit" class="light-blue darken-3 btn btn-large col s12">
-
-            </form>
-
-
-        </div>
-
-
-    </div>
-
-
-    <!--Import jQuery before materialize.js-->
-    <script> var pageType = "data1"; </script>
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
-    <script type="text/javascript" src="scripts/main.js"></script>   
-   
-
-</body>
+    </script>
+  </head>
+  <body>
+    <button onclick="capturePhotoWithData();">Capture Photo With Image Data</button> <br>
+    <button onclick="capturePhotoWithFile();">Capture Photo With Image File URI</button> <br>
+    <button onclick="getPhoto(pictureSource.PHOTOLIBRARY);">From Photo Library</button><br>
+    <button onclick="getPhoto(pictureSource.SAVEDPHOTOALBUM);">From Photo Album</button><br>
+    <img style="display:none;width:60px;height:60px;" id="smallImage" src="" />
+    <img style="display:none;" id="largeImage" src="" />
+  </body>
 </html>
