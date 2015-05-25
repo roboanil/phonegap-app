@@ -48,15 +48,15 @@ function onPhotoFileSuccess(imageData) {
   // //
   // smallImage.src = imageData;
 
-  // var URL = imageData;
-  // var Folder_Name = "hoverxlabs";
-  // var File_Name = "test.jpg";
-  // DownloadFile(URL, Folder_Name, File_Name)
+  var URL = imageData;
+  var Folder_Name = "hoverxlabs";
+  var File_Name = "test.jpg";
+  DownloadFile(URL, Folder_Name, File_Name)
 
-  if(sessionStorage.isprofileimage==1){
-	    getLocation();
-	}
-  movePic(imageData);
+ //  if(sessionStorage.isprofileimage==1){
+	//     getLocation();
+	// }
+ //  movePic(imageData);
 
 
 }
