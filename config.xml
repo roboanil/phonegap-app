@@ -18,8 +18,6 @@
 	<gap:plugin name="org.apache.cordova.camera" version="0.3.2" />
 
 	<gap:plugin name="org.apache.cordova.media-capture" version="0.3.3" />
-
-    <gap:plugin name="org.apache.cordova.media" version="1.0.0" />
 	
 	<gap:plugin name="org.apache.cordova.core.geolocation" version="0.3.10" />
 
