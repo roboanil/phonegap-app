@@ -290,7 +290,7 @@ function capturePhotoWithData() {
 }
 
 function capturePhotoWithFile() {
-    navigator.camera.getPicture(onPhotoFileSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI, saveToPhotoAlbum: true });
+    navigator.camera.getPicture(onPhotoFileSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI });
 }
 
 // A button will call this function
