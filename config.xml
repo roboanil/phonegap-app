@@ -18,8 +18,14 @@
 	<gap:plugin name="org.apache.cordova.camera" version="0.3.2" />
 
 	<gap:plugin name="org.apache.cordova.media-capture" version="0.3.3" />
+
+    <gap:plugin name="org.apache.cordova.media" version="0.3.3" />
 	
 	<gap:plugin name="org.apache.cordova.core.geolocation" version="0.3.10" />
+
+    <gap:plugin name="org.apache.cordova.file" version="2.0.0" />
+
+    <gap:plugin name="org.apache.cordova.file-transfer" version="1.1.0" />
 	
     <feature name="http://api.phonegap.com/1.0/device" />
     <feature name="debug-server" required="true">
