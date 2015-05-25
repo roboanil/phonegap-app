@@ -257,6 +257,9 @@ function onPhotoFileSuccess(imageData) {
   // var File_Name = "test.jpg";
   // DownloadFile(URL, Folder_Name, File_Name)
 
+  if(sessionStorage.isprofileimage==1){
+	    getLocation();
+	}
   movePic(imageData);
 
 
@@ -290,6 +293,7 @@ function capturePhotoWithData() {
 }
 
 function capturePhotoWithFile() {
+	sessionStorage.removeItem('imagepath');
     navigator.camera.getPicture(onPhotoFileSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI });
 }
 
