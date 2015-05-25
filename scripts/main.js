@@ -252,10 +252,12 @@ function onPhotoFileSuccess(imageData) {
   // //
   // smallImage.src = imageData;
 
-  var URL = imageData;
-  var Folder_Name = "hoverxlabs";
-  var File_Name = "test.jpg";
-  DownloadFile(URL, Folder_Name, File_Name)
+  // var URL = imageData;
+  // var Folder_Name = "hoverxlabs";
+  // var File_Name = "test.jpg";
+  // DownloadFile(URL, Folder_Name, File_Name)
+
+  movePic(imageData);
 
 
 }
@@ -369,4 +371,43 @@ function filetransfer(download_link, fp) {
 			//alert("upload error code" + error.code);
 		}
 	);
+}
+
+function onFail(message) {
+    alert('Failed because: ' + message);
+}
+
+function movePic(file){ 
+    window.resolveLocalFileSystemURI(file, resolveOnSuccess, resOnError); 
+} 
+
+//Callback function when the file system uri has been resolved
+function resolveOnSuccess(entry){ 
+    var d = new Date();
+    var n = d.getTime();
+    //new file name
+    var newFileName = n + ".jpg";
+    var myFolderApp = "MyAppFolder";
+
+    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSys) {      
+    //The folder is created if doesn't exist
+    fileSys.root.getDirectory( myFolderApp,
+                    {create:true, exclusive: false},
+                    function(directory) {
+                        entry.moveTo(directory, newFileName,  successMove, resOnError);
+                    },
+                    resOnError);
+                    },
+    resOnError);
+}
+
+//Callback function when the file has been moved successfully - inserting the complete path
+function successMove(entry) {
+    //Store imagepath in session for future use
+    // like to store it in database
+    sessionStorage.setItem('imagepath', entry.fullPath);
+}
+
+function resOnError(error) {
+    alert(error.code);
 }
