@@ -3,14 +3,14 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
         id        = "com.phonegap.upasha.camerademo"
         version   = "2.0.0">
-    <name>Umer Phonegap Camera test</name>
+    <name>Hoverx Phonegap Camera test</name>
 
     <description>
-        Example of camera using phonegap - Umer Pasha
+        Example of camera using phonegap - Anil
     </description>
 
     <author href="http://www.umerpasha.com" email="mail@umerpasha.com">
-        Umer Pasha
+        Anil
     </author>
 
     <gap:plugin name="com.phonegap.plugins.barcodescanner"/>
