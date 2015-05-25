@@ -4,8 +4,8 @@
     <title>Capture Photo</title>
     <meta name="viewport" content="width=device-width,height=device-height,initial-scale=1"/>
     <link type="text/css" rel="stylesheet" href="materialize/css/materialize.css"  media="screen,projection"/>
-  <link type="text/css" rel="stylesheet" href="style.css"  media="screen,projection"/>
-  <link rel="shortcut icon" type="image/x-icon" href="/images/ico.png"/> 
+    <link type="text/css" rel="stylesheet" href="style.css"  media="screen,projection"/>
+    <link rel="shortcut icon" type="image/x-icon" href="/images/ico.png"/> 
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="materialize/js/materialize.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
@@ -90,7 +90,7 @@
     }
 
     function capturePhotoWithFile() {
-        navigator.camera.getPicture(onPhotoFileSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI });
+        navigator.camera.getPicture(onPhotoFileSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI, saveToPhotoAlbum: true });
     }
     
     // A button will call this function
