@@ -82,122 +82,6 @@ function fail(error) {
   }
 );
 
-// loading menu
-$( ".side-nav" ).load( "menu.html" );
-
-// cookie functions
-function createCookie(name,value,days) {
-    // if (days) {
-    //     var date = new Date();
-    //     date.setTime(date.getTime()+(days*24*60*60*1000));
-    //     var expires = "; expires="+date.toGMTString();
-    // }
-    // else var expires = "";
-    // document.cookie = name+"="+value+expires+"; path=/";
-
-    localStorage.setItem(name, value);
-
-}
-
-function readCookie(name) {
-    // var nameEQ = name + "=";
-    // var ca = document.cookie.split(';');
-    // for(var i=0;i < ca.length;i++) {
-    //     var c = ca[i];
-    //     while (c.charAt(0)==' ') c = c.substring(1,c.length);
-    //     if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
-    // }
-    // return null;
-    if(localStorage[name])
-        return localStorage[name];
-    else
-        return null;
-
-}
-
-function eraseCookie(name) {
-    createCookie(name,"",-1);
-}
-
-function openInWebView(url)
-{
-    var anchor = document.createElement('a');
-    anchor.setAttribute('href', url);
-    //anchor.setAttribute('target', '_self');
-    
-    var dispatch = document.createEvent('HTMLEvents')
-    dispatch.initEvent('click', true, true);
-    
-    anchor.dispatchEvent(dispatch);
-}
-
-
-// login page
-$("#loginsubmit").click(function(e){
-  
-    e.preventDefault();
-  var phoneno = $("#phoneno").val();
-  var password = $("#password").val();
-    // window.location="home.html";
-    // var ref = window.open('home.html', '_blank', 'location=yes');
-    // window.location.replace("home.html");
-    // openInWebView("home.html");
-    
-
-
-  $.post("http://hoverxlabs.com/lands/collectorv2_bk/login.php", {phoneno:phoneno,password:password}, function(data){
-      if(data != 0) {
-        createCookie("userid",data,30);
-        // window.location="home.html";
-            // $.mobile.changePage("home.html");
-            // navigator.app.loadUrl('home.html');
-            // var ref = window.open('home.html', '_blank', 'location=yes');
-            window.location.href = "home.html";
-
-      } else {
-        $("#message").html("Please check phone number and password");
-      }
-  });
-
-
-    /*$.ajax({
-        url: "http://hoverxlabs.com/lands/collectorv2_bk/login.php",
-        type: 'POST',
-        datatype: 'json',
-        data: {phoneno:phoneno,password:password},
-        timeout: 5000,
-        success: function(data, status){
-            if(data != 0) {
-                createCookie("userid",data,30);
-                window.location="home.html";
-                // $.mobile.changePage("home.html");
-                // navigator.app.loadUrl('home.html');
-                // var ref = window.open('home.html', '_blank', 'location=yes');
-
-            } else {
-                $("#message").html("Please check phone number and password");
-            }
-        },
-        error: function(){
-            alert('no data');
-        }
-    });*/
-
-
-});
-
-// send user to login if not logged in
-if(!readCookie("userid") && pageType != "login" && pageType != "index") {
-    window.location="login.html";
-}
-
-// logout
-    $('body').on('click', '#logout', function (){
-        eraseCookie("userid")
-        eraseCookie("projectid");
-        window.location="index.html";
-    });
-
 
 // location service
 var options = {
@@ -230,8 +114,8 @@ $(document).ready(function(){
     //     capturePhoto();
     // });
     
-    var currentuserid = readCookie("userid");
-    var currentprojectid = readCookie("projectid");
+    // var currentuserid = readCookie("userid");
+    // var currentprojectid = readCookie("projectid");
 
     //-----------------------------------------------
     //-------------------- HOME ---------------------
