@@ -1,198 +1,42 @@
 var pictureSource;   // picture source
-var destinationType; // sets the format of returned value 
+var destinationType; // sets the format of returned value
 
-// Wait for PhoneGap to connect with the device
+// Wait for device API libraries to load
 //
 document.addEventListener("deviceready",onDeviceReady,false);
 
-// PhoneGap is ready to be used!
+// device APIs are available
 //
 function onDeviceReady() {
     pictureSource=navigator.camera.PictureSourceType;
     destinationType=navigator.camera.DestinationType;
-}
-
-// Called when a photo is successfully retrieved
-//
-function onPhotoDataSuccess(imageData) {
-  // Get image handle
-  //
-  var smallImage = document.getElementById('smallImage');
-
-  // Unhide image elements
-  //
-  smallImage.style.display = 'block';
-
-  // Show the captured photo
-  // The inline CSS rules are used to resize the image
-  //
-  smallImage.src = "data:image/jpeg;base64," + imageData;
-}
-
-// Called when a photo is successfully retrieved
-//
-function onPhotoFileSuccess(imageData) {
-  // // Get image handle
-  // console.log(JSON.stringify(imageData));
-  
-  // // Get image handle
-  // //
-  // var smallImage = document.getElementById('smallImage');
-
-  // // Unhide image elements
-  // //
-  // smallImage.style.display = 'block';
-
-  // // Show the captured photo
-  // // The inline CSS rules are used to resize the image
-  // //
-  // smallImage.src = imageData;
-
-  var URL = imageData;
-  var Folder_Name = "hoverxlabs";
-  var File_Name = "test.jpg";
-  DownloadFile(URL, Folder_Name, File_Name)
-
- //  if(sessionStorage.isprofileimage==1){
-	//     getLocation();
-	// }
- //  movePic(imageData);
-
+    // window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, onFileSystemSuccess, fail);
 
 }
 
-// Called when a photo is successfully retrieved
-//
-function onPhotoURISuccess(imageURI) {
-  // Uncomment to view the image file URI 
-  // console.log(imageURI);
-
-  // Get image handle
-  //
-  var largeImage = document.getElementById('largeImage');
-
-  // Unhide image elements
-  //
-  largeImage.style.display = 'block';
-
-  // Show the captured photo
-  // The inline CSS rules are used to resize the image
-  //
-  largeImage.src = imageURI;
-}
-
-// A button will call this function
-//
-function capturePhotoWithData() {
+function capturePhoto() {
+    console.log("Camera");
+    alert("got");
+    // window.location.href = "data_1.html";
   // Take picture using device camera and retrieve image as base64-encoded string
-  navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50 });
+    navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50,
+    destinationType: destinationType.DATA_URL });
 }
 
-function capturePhotoWithFile() {
-	sessionStorage.removeItem('imagepath');
-    navigator.camera.getPicture(onPhotoFileSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI });
+function onPhotoDataSuccess(imageData) {
+    window.resolveLocalFileSystemURI(imageData, resolveOnSuccess, resOnError);
 }
 
-// A button will call this function
-//
-function getPhoto(source) {
-  // Retrieve image file location from specified source
-  navigator.camera.getPicture(onPhotoURISuccess, onFail, { quality: 50, 
-    destinationType: destinationType.FILE_URI,
-    sourceType: source });
-}
-
-// Called if something bad happens.
-// 
-function onFail(message) {
-  alert('Failed because: ' + message);
-}
-
-//First step check parameters mismatch and checking network connection if available call    download function
-function DownloadFile(URL, Folder_Name, File_Name) {
-	//Parameters mismatch check
-	if (URL == null && Folder_Name == null && File_Name == null) {
-	    return;
-	}
-	else {
-	    //checking Internet connection availablity
-	    var networkState = navigator.connection.type;
-	    if (networkState == Connection.NONE) {
-	        return;
-	    } else {
-	        download(URL, Folder_Name, File_Name); //If available download function call
-	    }
-  	}
-}
-
-function download(URL, Folder_Name, File_Name) {
-//step to request a file system 
-    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, fileSystemSuccess, fileSystemFail);
-
-	function fileSystemSuccess(fileSystem) {
-	    var download_link = encodeURI(URL);
-	    ext = download_link.substr(download_link.lastIndexOf('.') + 1); //Get extension of URL
-
-	    var directoryEntry = fileSystem.root; // to get root path of directory
-	    directoryEntry.getDirectory(Folder_Name, { create: true, exclusive: false }, onDirectorySuccess, onDirectoryFail); // creating folder in sdcard
-	    var rootdir = fileSystem.root;
-	    var fp = rootdir.fullPath; // Returns Fulpath of local directory
-
-	    fp = fp + "/" + Folder_Name + "/" + File_Name + "." + ext; // fullpath and name of the file which we want to give
-	    // download function call
-	    filetransfer(download_link, fp);
-	}
-
-	function onDirectorySuccess(parent) {
-	    // Directory created successfuly
-	}
-
-	function onDirectoryFail(error) {
-	    //Error while creating directory
-	    alert("Unable to create new directory: " + error.code);
-	}
-
-	function fileSystemFail(evt) {
-		//Unable to access file system
-		alert(evt.target.error.code);
-	}
-
-}
-
-function filetransfer(download_link, fp) {
-	var fileTransfer = new FileTransfer();
-	// File download function with URL and local path
-	fileTransfer.download(download_link, fp, function (entry) {
-        alert("download complete: " + entry.fullPath);
-    }, function (error) {
-			//Download abort errors or download failed errors
-			alert("download error source " + error.source);
-			//alert("download error target " + error.target);
-			//alert("upload error code" + error.code);
-		}
-	);
-}
-
-function onFail(message) {
-    alert('Failed because: ' + message);
-}
-
-function movePic(file){ 
-    window.resolveLocalFileSystemURI(file, resolveOnSuccess, resOnError); 
-} 
-
-//Callback function when the file system uri has been resolved
-function resolveOnSuccess(entry){ 
+function resolveOnSuccess(entry){
+    alert("resolve");
     var d = new Date();
     var n = d.getTime();
     //new file name
     var newFileName = n + ".jpg";
-    var myFolderApp = "MyAppFolder";
+    var myFolderApp = "Hoverxlabs";
 
-    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSys) {      
-    //The folder is created if doesn't exist
-    fileSys.root.getDirectory( myFolderApp,
-                    {create:true, exclusive: false},
+    window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, function(fileSystem) { 
+        fileSystem.root.getDirectory( myFolderApp,{create:true, exclusive: false},
                     function(directory) {
                         entry.moveTo(directory, newFileName,  successMove, resOnError);
                     },
@@ -201,13 +45,377 @@ function resolveOnSuccess(entry){
     resOnError);
 }
 
-//Callback function when the file has been moved successfully - inserting the complete path
 function successMove(entry) {
-    //Store imagepath in session for future use
+    alert("successmove");
     // like to store it in database
-    sessionStorage.setItem('imagepath', entry.fullPath);
+    // sessionStorage.setItem('imagepath', entry.fullPath);
 }
 
 function resOnError(error) {
     alert(error.code);
 }
+
+function onFail(message) {
+    alert('Failed because: ' + message);
+}
+
+function onFileSystemSuccess(fileSystem) {
+    var directoryEntry = fileSystem.root;
+    // Retrieve an existing directory, or create it if it does not already exist
+    directoryEntry.getDirectory("Hoverxlabs", {create: true, exclusive: false}, success, fail);
+
+}
+
+function success(dirEntry) {
+    alert("Directory Name: " + dirEntry.name);
+}
+
+function fail(error) {
+    alert("Unable to create new directory: " + error.code);
+}
+
+// Initialize collapse button
+ $('.button-collapse').sideNav({
+    menuWidth: 260, // Default is 240
+    edge: 'left', // Choose the horizontal origin
+    closeOnClick: true // Closes side-nav on <a> clicks, useful for Angular/Meteor
+  }
+);
+
+// loading menu
+$( ".side-nav" ).load( "menu.html" );
+
+// cookie functions
+function createCookie(name,value,days) {
+    // if (days) {
+    //     var date = new Date();
+    //     date.setTime(date.getTime()+(days*24*60*60*1000));
+    //     var expires = "; expires="+date.toGMTString();
+    // }
+    // else var expires = "";
+    // document.cookie = name+"="+value+expires+"; path=/";
+
+    localStorage.setItem(name, value);
+
+}
+
+function readCookie(name) {
+    // var nameEQ = name + "=";
+    // var ca = document.cookie.split(';');
+    // for(var i=0;i < ca.length;i++) {
+    //     var c = ca[i];
+    //     while (c.charAt(0)==' ') c = c.substring(1,c.length);
+    //     if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    // }
+    // return null;
+    if(localStorage[name])
+        return localStorage[name];
+    else
+        return null;
+
+}
+
+function eraseCookie(name) {
+    createCookie(name,"",-1);
+}
+
+function openInWebView(url)
+{
+    var anchor = document.createElement('a');
+    anchor.setAttribute('href', url);
+    //anchor.setAttribute('target', '_self');
+    
+    var dispatch = document.createEvent('HTMLEvents')
+    dispatch.initEvent('click', true, true);
+    
+    anchor.dispatchEvent(dispatch);
+}
+
+
+// login page
+$("#loginsubmit").click(function(e){
+  
+    e.preventDefault();
+  var phoneno = $("#phoneno").val();
+  var password = $("#password").val();
+    // window.location="home.html";
+    // var ref = window.open('home.html', '_blank', 'location=yes');
+    // window.location.replace("home.html");
+    // openInWebView("home.html");
+    
+
+
+  $.post("http://hoverxlabs.com/lands/collectorv2_bk/login.php", {phoneno:phoneno,password:password}, function(data){
+      if(data != 0) {
+        createCookie("userid",data,30);
+        // window.location="home.html";
+            // $.mobile.changePage("home.html");
+            // navigator.app.loadUrl('home.html');
+            // var ref = window.open('home.html', '_blank', 'location=yes');
+            window.location.href = "home.html";
+
+      } else {
+        $("#message").html("Please check phone number and password");
+      }
+  });
+
+
+    /*$.ajax({
+        url: "http://hoverxlabs.com/lands/collectorv2_bk/login.php",
+        type: 'POST',
+        datatype: 'json',
+        data: {phoneno:phoneno,password:password},
+        timeout: 5000,
+        success: function(data, status){
+            if(data != 0) {
+                createCookie("userid",data,30);
+                window.location="home.html";
+                // $.mobile.changePage("home.html");
+                // navigator.app.loadUrl('home.html');
+                // var ref = window.open('home.html', '_blank', 'location=yes');
+
+            } else {
+                $("#message").html("Please check phone number and password");
+            }
+        },
+        error: function(){
+            alert('no data');
+        }
+    });*/
+
+
+});
+
+// send user to login if not logged in
+if(!readCookie("userid") && pageType != "login" && pageType != "index") {
+    window.location="login.html";
+}
+
+// logout
+    $('body').on('click', '#logout', function (){
+        eraseCookie("userid")
+        eraseCookie("projectid");
+        window.location="index.html";
+    });
+
+
+// location service
+var options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0
+};
+
+function error(err) {
+  console.warn('ERROR(' + err.code + '): ' + err.message);
+};
+
+function initCoords() {
+      if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                    currentLat = position.coords.latitude;
+                    currentLong = position.coords.longitude;
+                    currentAccu = position.coords.accuracy;
+            }, error, options);
+            
+      } else {
+        showError("Your browser does not support Geolocation!");
+      }
+}
+
+
+$(document).ready(function(){
+
+    // $("#cameraOpen").click(function(){
+    //     capturePhoto();
+    // });
+    
+    var currentuserid = readCookie("userid");
+    var currentprojectid = readCookie("projectid");
+
+    //-----------------------------------------------
+    //-------------------- HOME ---------------------
+    //-----------------------------------------------
+    if(pageType == "home") {
+
+        var projectlists = '';
+        // get projects lists when home loads
+        $.post("http://hoverxlabs.com/lands/collectorv2_bk/project_lists.php", {userid:currentuserid}, function(data){
+            if(data != 0) {
+                projectlists = JSON.parse(data);
+                // console.log(projectlists);
+                var i;
+                for (i = 0; i < projectlists.length; ++i) {
+                    $("#projectlists").append("<li><a href='#' data-projectid='" + projectlists[i]["id"] + "' class='projectids'> " + projectlists[i]["title"] +"</a></li>");
+                }
+            } else {
+                $("#projectlists").html("Error loading project lists.");
+            }
+        });
+        
+        // if no project id selected
+        if(!readCookie("projectid")) {
+
+            $('.button-collapse').sideNav('show');
+            $("#home-container").html("<h4>Please select a project from the menu.</h4>");
+            $(".fixed-action-btn").hide();
+        
+        // if projectid selected
+        } else {
+
+            $.post("http://hoverxlabs.com/lands/collectorv2_bk/collection_lists.php", {projectid:currentprojectid}, function(data){
+                if(data != 0) {
+                    var collectionlists = JSON.parse(data);
+                    var i;
+                    // get project title
+                    var projTitle;
+                    $.each( projectlists, function( key, value ) {
+                      if(projectlists[key].id == currentprojectid){
+                            projTitle = projectlists[key].title;            
+                        }
+                    });
+
+                    $("#currentprojectname").html("<h4>" + projTitle + "</h4>");
+                    for (i = 0; i < collectionlists.length; ++i) {
+                        $("#collectionlists").append("<li class='collection-item'>" + collectionlists[i]["title"] + "</li>");
+                    }
+
+                } else {
+                    $("#projectlists").html("Error loading collection data.");
+                }
+
+            });
+        }
+
+        // set project cookie
+        $('body').on('click', '.projectids', function (){
+            var selectedprojectid = $(this).data("projectid");
+            createCookie("projectid",selectedprojectid,30);
+            window.location="home.html";
+        });
+
+    }
+
+    //-----------------------------------------------
+    //-------------------- data1 ---------------------
+    //-----------------------------------------------
+    if(pageType == "data1") {
+
+        if (navigator.geolocation) {
+
+            var currentLat, currentLong, currentAccu;
+
+            navigator.geolocation.getCurrentPosition(function(position) {
+                currentLat = position.coords.latitude;
+                currentLong = position.coords.longitude;
+                currentAccu = position.coords.accuracy;
+
+                // do what ever you want with the current location
+                $("#lat").html(currentLat);
+                $("#long").html(currentLong);
+                $("#accuracy-m").html(currentAccu);
+                if(currentAccu > 15) { $("#warning").html("Low GPS Accuracy"); }
+
+                $("#addnewsubmit").click(function(e){
+                    e.preventDefault();
+                    // sending location and form data to local storage, validation needs to be done // robo anil, please do this
+                    values = {};
+                    $.each($('#addnewform').serializeArray(), function(i, field) {
+                        values[field.name] = field.value;
+                    });
+                    data = [];
+                    data.push(values);
+                    localStorage.setItem("hoverxlabs", JSON.stringify(data));
+
+                    window.location.href = "data_2.html";
+                });
+                
+            }, error, options);
+
+        } else {
+            showError("Your browser does not support Geolocation!");
+        }
+    }
+
+    //-----------------------------------------------
+    //-------------------- data2 (TRAIL)---------------------
+    //-----------------------------------------------
+    if(pageType == "data2") {
+
+        var nopoints = 0;
+        var moveLocLat = 0.0, moveLocLong = 0.0, moveLocAccu = 0;
+        var trailArray = [];
+        var recordLiveLoc;
+
+        var localUserStore = localStorage['hoverxlabs'];
+        localUserStore = JSON.parse(localUserStore);
+
+        $("#start-recording").click(function() {
+        $("#startRecordingWrapper").slideUp();
+        $("#recodingProgress").slideDown();
+
+        recordLiveLoc = window.setInterval(function(){
+            // Try HTML5 geolocation
+            if(navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+
+                    moveLocLat = position.coords.latitude;
+                    moveLocLong = position.coords.longitude;
+                    moveLocAccu = position.coords.accuracy;
+
+                }, function() {
+                    handleNoGeolocation(true);
+                });
+            } else {
+            // Browser doesn't support Geolocation
+            handleNoGeolocation(false);
+            }
+            // update UI
+            $("#latRecord").html(moveLocLat);
+            $("#longRecord").html(moveLocLong);
+            $("#accuracyRecord").html(moveLocAccu);
+            $("#noofpointsRecord").html(nopoints);
+
+            var trailArrayPoint =  moveLocLat + ',' + moveLocLong + ',' + moveLocAccu + ',' + Date.now();
+            trailArray[nopoints] = trailArrayPoint;
+            localUserStore[localUserStore.length-1].trial = trailArray;
+            localStorage.setItem("hoverxlabs", JSON.stringify(localUserStore));
+            nopoints++;
+            }, 2500);
+        });
+
+        $("#finish-recording").click(function(){
+            clearInterval(recordLiveLoc);            
+            $(this).html("Please wait...").addClass("disabled");
+            // add trail data to local storage Mr Robo Anil
+            window.location.href = "data_3.html";
+        });
+    }
+
+     //-----------------------------------------------
+    //-------------------- data3 ---------------------
+    //-----------------------------------------------
+    if(pageType == "data3") {
+        $('select').material_select();
+
+        jQuery.validator.setDefaults({
+            debug: true,
+            success: "valid"
+        });
+
+        $('#userClientForm').validate({
+            rules: {
+                road: {
+                    required: true
+                }
+            }
+        });
+
+        $("#finalsubmit").submit(function(){
+            console.log("form");
+        });
+
+    }
+
+});
+
