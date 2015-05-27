@@ -24,11 +24,12 @@ function capturePhoto() {
 }
 
 function onPhotoDataSuccess(imageData) {
-    window.resolveLocalFileSystemURI(imageData, resolveOnSuccess, resOnError);
+  alert("onPhotoDataSuccess");
+  window.resolveLocalFileSystemURI(imageData, resolveOnSuccess, resOnError);
 }
 
 function resolveOnSuccess(entry){
-    alert("resolve");
+    alert("resolveOnSuccess");
     var d = new Date();
     var n = d.getTime();
     //new file name
