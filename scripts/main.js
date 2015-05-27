@@ -19,8 +19,7 @@ function capturePhoto() {
     alert("got");
     // window.location.href = "data_1.html";
   // Take picture using device camera and retrieve image as base64-encoded string
-    navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50,
-    destinationType: Camera.DestinationType.FILE_URI });
+    navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI });
     //destinationType: destinationType.DATA_URL
 }
 
@@ -58,7 +57,7 @@ function resOnError(error) {
 }
 
 function onFail(message) {
-    alert('Failed because: ' + message);
+    alert(message);
 }
 
 function onFileSystemSuccess(fileSystem) {
