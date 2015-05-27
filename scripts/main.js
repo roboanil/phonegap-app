@@ -18,14 +18,13 @@ function capturePhoto() {
     console.log("Camera");
     alert("got");
     // window.location.href = "data_1.html";
-  // Take picture using device camera and retrieve image as base64-encoded string
-    navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI });
-    //destinationType: destinationType.DATA_URL
+    // Take picture using device camera and retrieve image as base64-encoded string
+  navigator.camera.getPicture(onPhotoDataSuccess, onFail, { quality: 50, destinationType: Camera.DestinationType.FILE_URI });    //destinationType: destinationType.DATA_URL
 }
 
-function onPhotoDataSuccess(imageData) {
+function onPhotoDataSuccess(imageURI) {
   alert("onPhotoDataSuccess");
-  window.resolveLocalFileSystemURI(imageData, resolveOnSuccess, resOnError);
+  window.resolveLocalFileSystemURI(imageURI, resolveOnSuccess, resOnError);
 }
 
 function resolveOnSuccess(entry){
